@@ -1,0 +1,30 @@
+service: 
+provider: 
+  name: aws
+  environments:
+    STAGE: ${opt:stage}
+  iamRoleStatements:
+    - Effect: Allow
+      Action:
+        - secretsmanager:GetSecretValue
+        - sns:*
+        - sqs:*
+        - lambda:InvokeFunction
+        - lambda:InvokeAsync
+      Resources: "*"
+functions:
+  getToolbar: 
+    name: get-toolbar
+    handler: src/api/handlers/toolbar.getAll
+    events: 
+      - http: 
+        method: get
+        path: /toolbar
+
+plugins:
+  - serverless-plugin-typescript
+  - serverless-jest-plugin
+  - serverless-domain-manager
+  - serverless-offline
+custom: 
+
